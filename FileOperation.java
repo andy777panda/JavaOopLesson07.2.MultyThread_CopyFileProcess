@@ -29,10 +29,37 @@ public class FileOperation {
 		if (fileIn.exists() == false) {
 			throw new FileNotFoundException();
 		} else {
-			// jdk1.6
-			FileInputStream fis = null;
-			try {
-				fis = new FileInputStream(fileIn);
+//			// jdk1.6
+//			FileInputStream fis = null;
+//			try {
+//				fis = new FileInputStream(fileIn);
+//				for (; !isComplite[0];) {
+//					for (; bufer[0] != null;) {
+//						try {
+//							wait();
+//						} catch (InterruptedException e) {
+//							e.printStackTrace();
+//						}
+//					}
+//					readByte[0] = fis.read(bufer[0] = new byte[BUFER_SIZE]);
+//					notifyAll();
+//					if (readByte[0] == -1)
+//						isComplite[0] = true;
+//				}
+//				System.out.println("1.read file - stop");
+//			} catch (IOException e) {
+//				throw e;
+//			} finally {
+//				try {
+//					if (fis != null)
+//						fis.close();
+//				} catch (IOException e) {
+//					System.out.println("Error close file" + fileIn.getName());
+//				}
+//			}
+
+			// jdk1.7
+			try (FileInputStream fis = new FileInputStream(fileIn)) {
 				for (; !isComplite[0];) {
 					for (; bufer[0] != null;) {
 						try {
@@ -46,36 +73,52 @@ public class FileOperation {
 					if (readByte[0] == -1)
 						isComplite[0] = true;
 				}
-				System.out.println("1.read file - stop");
 			} catch (IOException e) {
 				throw e;
-			} finally {
-				try {
-					if (fis != null)
-						fis.close();
-				} catch (IOException e) {
-					System.out.println("Error close file" + fileIn.getName());
-				}
 			}
-
-			// jdk1.7
-			// try (FileInputStream fis = new FileInputStream(in);
-			// FileOutputStream fos = new FileOutputStream(out)) {
-			// for (; (readByte = fis.read(bufer)) > 0;) {
-			// fos.write(bufer, 0, readByte);
-			// }
-			// } catch (IOException e) {
-			// throw e;
-			// }
 		}
 	}
 
 	
 	public synchronized void writeFile() throws IOException {
-		// jdk1.6
-		FileOutputStream fos = null;
-		try {
-			fos = new FileOutputStream(fileOut);
+//		// jdk1.6
+//		FileOutputStream fos = null;
+//		try {
+//			fos = new FileOutputStream(fileOut);
+//			for (; readByte[0] != -1;) {
+//				for (; bufer[0] == null;) {
+//					try {
+//						wait();
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//				if (!isComplite[0]) {
+//					bufer[1] = bufer[0].clone();
+//					readByte[1] = readByte[0];
+//					bufer[0] = null;
+//					readByte[0] = 0;
+//					notifyAll();
+//					fos.write(bufer[1], 0, readByte[1]);
+//				}
+//			}
+//			System.out.println("2.write file - stop");
+//			isComplite[1] = true;
+//			notify();
+//		} catch (IOException e) {
+//			throw e;
+//		} finally {
+//			try {
+//				if (fos != null)
+//					fos.close();
+//			} catch (IOException e) {
+//				System.out.println("Error close file" + fileOut.getName());
+//			}
+//		}
+		
+		
+		// jdk1.7
+		try (FileOutputStream fos = new FileOutputStream(fileOut)) {
 			for (; readByte[0] != -1;) {
 				for (; bufer[0] == null;) {
 					try {
@@ -98,13 +141,6 @@ public class FileOperation {
 			notify();
 		} catch (IOException e) {
 			throw e;
-		} finally {
-			try {
-				if (fos != null)
-					fos.close();
-			} catch (IOException e) {
-				System.out.println("Error close file" + fileOut.getName());
-			}
 		}
 	}
 

@@ -13,9 +13,7 @@ import java.io.File;
 public class Main {
 
 	public static void main(String[] args) {
-		long tstart, tend;
-
-		tstart = System.currentTimeMillis();
+		long tstart = System.currentTimeMillis();
 
 		File fileIn = new File("sample.pdf");
 		File fileOut = new File("sampleC.pdf");
@@ -37,7 +35,6 @@ public class Main {
 			System.out.println(e);
 		}
 
-		tend = System.currentTimeMillis();
-		System.out.println(" -- " + (tend - tstart) + " ms");
+		System.out.println(" -- " + (System.currentTimeMillis() - tstart) + " ms");
 	}
 }
